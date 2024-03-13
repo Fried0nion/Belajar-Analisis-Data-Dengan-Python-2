@@ -6,8 +6,7 @@ import seaborn as sns
 import streamlit as st
 # Hide PyplotGlobalUseWarning
 st.set_option('deprecation.showPyplotGlobalUse', False)
-#change dir
-os.chdir("C:/Users/FRY/Downloads/E-commerce-public-dataset/data")
+
 
 # dashboard title
 st.title("Payment type and review distribution")
