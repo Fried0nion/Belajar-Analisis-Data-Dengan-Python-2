@@ -13,10 +13,10 @@ st.title("Payment type and review distribution")
 
 #=-=-=-=-=-=-=-=-=-==-
 #mengambil data yang dibutuhkan
-order_reviews_df = pd.read_csv("order_reviews_dataset.csv", delimiter=",")
-sellers_df = pd.read_csv("sellers_dataset.csv", delimiter=",")
-orders_df = pd.read_csv("orders_dataset.csv", delimiter=",")
-customers_df = pd.read_csv("customers_dataset.csv", delimiter=",")
+order_reviews_df = pd.read_csv("data/order_reviews_dataset.csv", delimiter=",")
+sellers_df = pd.read_csv("data/sellers_dataset.csv", delimiter=",")
+orders_df = pd.read_csv("data/orders_dataset.csv", delimiter=",")
+customers_df = pd.read_csv("data/customers_dataset.csv", delimiter=",")
 orders_df.dropna(subset=['order_delivered_carrier_date', 'order_delivered_customer_date'], inplace=True)
 
 
@@ -27,6 +27,9 @@ sellers_state_counts = sellers_df.groupby('state').seller_id.nunique()
 
 merged_counts = pd.concat([customers_state_counts, sellers_state_counts], axis=1, keys=['Customers', 'Sellers'])
 
+delivery_time = orders_df["order_delivered_customer_date"] - orders_df["order_delivered_carrier_date"]
+delivery_time = round(delivery_time.apply(lambda x: x.total_seconds())/86400,1)
+orders_df["delivery_time"] = delivery_time
 
 
 
