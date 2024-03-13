@@ -20,6 +20,8 @@ customers_df = pd.read_csv("data/customers_dataset.csv", delimiter=",")
 orders_df.dropna(subset=['order_delivered_carrier_date', 'order_delivered_customer_date'], inplace=True)
 
 
+customers_df.rename(columns={'customer_state': 'state'}, inplace=True)
+sellers_df.rename(columns={'seller_state': 'state'}, inplace=True)
 
 customers_state_counts = customers_df.groupby('state').customer_id.nunique()
 sellers_state_counts = sellers_df.groupby('state').seller_id.nunique()
