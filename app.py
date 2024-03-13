@@ -39,6 +39,7 @@ orders_df["delivery_time"] = delivery_time
 
 
 
+
 # select the type of users
 selected_feature = st.selectbox('Select type of data', ['Customers vs Sellers', 'Review and Score Dist.'])
 
@@ -48,34 +49,32 @@ if selected_feature == 'Review and Score Dist.':
     selected_plot = st.selectbox('Select Plot', ['Scatter Plot', 'Box Plot', 'Violin Plot'])
     if selected_plot == 'Scatter Plot':
         # Plotting the scatter plot
-        plt.figure(figsize=(10, 6))
-        plt.scatter(merged_df['delivery_time'], merged_df['review_score'], alpha=0.5)
-        plt.title('Scatter Plot of Delivery Time vs Review Score')
-        plt.xlabel('Delivery Time (days)')
-        plt.ylabel('Review Score')
-        plt.grid(True)
-        plt.show()
-    elif selected_feature == 'Box Plot':
-        plt.figure(figsize=(12, 8))
-        sns.boxplot(x=pd.cut(merged_df['delivery_time'], bins=[0, 10, 20, 30, 40, 50, 100, float('inf')], labels=['0-10', '11-20', '21-30', '31-40', '41-50', '51-100', '100+']), y=merged_df['review_score'])
-        plt.title('Box Plot of Review Score vs Delivery Time')
-        plt.xlabel('Delivery Time (days)')
-        plt.ylabel('Review Score')
-        plt.show()
-    elif selected_feature == 'Violin Plot':
-        plt.figure(figsize=(12, 8))
-        sns.violinplot(x=pd.cut(merged_df['delivery_time'], bins=[0, 10, 20, 30, 40, 50, 100, float('inf')], labels=['0-10', '11-20', '21-30', '31-40', '41-50', '51-100', '100+']), y=merged_df['review_score'])
-        plt.title('Violin Plot of Review Score vs Delivery Time')
-        plt.xlabel('Delivery Time (days)')
-        plt.ylabel('Review Score')
-        plt.show()
-
-
-
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.scatter(merged_df['delivery_time'], merged_df['review_score'], alpha=0.5)
+        ax.set_title('Scatter Plot of Delivery Time vs Review Score')
+        ax.set_xlabel('Delivery Time (days)')
+        ax.set_ylabel('Review Score')
+        ax.grid(True)
+        st.pyplot(fig)
+    elif selected_plot == 'Box Plot':
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.boxplot(x=pd.cut(merged_df['delivery_time'], bins=[0, 10, 20, 30, 40, 50, 100, float('inf')], labels=['0-10', '11-20', '21-30', '31-40', '41-50', '51-100', '100+']), y=merged_df['review_score'], ax=ax)
+        ax.set_title('Box Plot of Review Score vs Delivery Time')
+        ax.set_xlabel('Delivery Time (days)')
+        ax.set_ylabel('Review Score')
+        st.pyplot(fig)
+    elif selected_plot == 'Violin Plot':
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.violinplot(x=pd.cut(merged_df['delivery_time'], bins=[0, 10, 20, 30, 40, 50, 100, float('inf')], labels=['0-10', '11-20', '21-30', '31-40', '41-50', '51-100', '100+']), y=merged_df['review_score'], ax=ax)
+        ax.set_title('Violin Plot of Review Score vs Delivery Time')
+        ax.set_xlabel('Delivery Time (days)')
+        ax.set_ylabel('Review Score')
+        st.pyplot(fig)
     
 elif selected_feature == 'Customers vs Sellers':
-    merged_counts.plot(kind='bar', stacked=True, figsize=(10, 6))
-    plt.title('Number of Customers and Sellers by State')
-    plt.xlabel('State')
-    plt.ylabel('Count')
-    plt.show()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    merged_counts.plot(kind='bar', stacked=True, ax=ax)
+    ax.set_title('Number of Customers and Sellers by State')
+    ax.set_xlabel('State')
+    ax.set_ylabel('Count')
+    st.pyplot(fig)
