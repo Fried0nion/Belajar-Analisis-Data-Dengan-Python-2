@@ -17,7 +17,7 @@ order_reviews_df = pd.read_csv("data/order_reviews_dataset.csv", delimiter=",")
 sellers_df = pd.read_csv("data/sellers_dataset.csv", delimiter=",")
 orders_df = pd.read_csv("data/orders_dataset.csv", delimiter=",")
 customers_df = pd.read_csv("data/customers_dataset.csv", delimiter=",")
-orders_df.dropna(subset=['order_delivered_carrier_date', 'order_delivered_customer_date'], inplace=True)
+orders_df.dropna(subset=['order_delivered_carrier_date', 'order_delivered_customer_date','order_approved_at'], inplace=True)
 
 
 customers_df.rename(columns={'customer_state': 'state'}, inplace=True)
@@ -25,9 +25,13 @@ sellers_df.rename(columns={'seller_state': 'state'}, inplace=True)
 
 customers_state_counts = customers_df.groupby('state').customer_id.nunique()
 sellers_state_counts = sellers_df.groupby('state').seller_id.nunique()
-
-
 merged_counts = pd.concat([customers_state_counts, sellers_state_counts], axis=1, keys=['Customers', 'Sellers'])
+
+datetime_or = ["order_purchase_timestamp","order_approved_at","order_delivered_carrier_date","order_delivered_customer_date","order_estimated_delivery_date"]
+for column in datetime_or:
+  orders_df[column] = pd.to_datetime(orders_df[column])
+  orders_df.info()
+
 
 delivery_time = orders_df["order_delivered_customer_date"] - orders_df["order_delivered_carrier_date"]
 delivery_time = round(delivery_time.apply(lambda x: x.total_seconds())/86400,1)
