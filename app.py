@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import os
 import seaborn as sns
@@ -7,6 +6,9 @@ import streamlit as st
 # Hide PyplotGlobalUseWarning
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
+#change dir
+current_directory = os.path.dirname(os.path.realpath(__file__))
+os.chdir(current_directory)
 
 # dashboard title
 st.title("Payment type and review distribution")
@@ -30,12 +32,12 @@ merged_counts = pd.concat([customers_state_counts, sellers_state_counts], axis=1
 datetime_or = ["order_purchase_timestamp","order_approved_at","order_delivered_carrier_date","order_delivered_customer_date","order_estimated_delivery_date"]
 for column in datetime_or:
   orders_df[column] = pd.to_datetime(orders_df[column])
-  orders_df.info()
 
 
 delivery_time = orders_df["order_delivered_customer_date"] - orders_df["order_delivered_carrier_date"]
 delivery_time = round(delivery_time.apply(lambda x: x.total_seconds())/86400,1)
 orders_df["delivery_time"] = delivery_time
+
 
 
 
@@ -70,6 +72,7 @@ if selected_feature == 'Review and Score Dist.':
         ax.set_xlabel('Delivery Time (days)')
         ax.set_ylabel('Review Score')
         st.pyplot(fig)
+
 
 
 
