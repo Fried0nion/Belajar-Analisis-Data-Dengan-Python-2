@@ -70,11 +70,34 @@ if selected_feature == 'Review and Score Dist.':
         ax.set_xlabel('Delivery Time (days)')
         ax.set_ylabel('Review Score')
         st.pyplot(fig)
+
+
+
     
 elif selected_feature == 'Customers vs Sellers':
-    fig, ax = plt.subplots(figsize=(10, 6))
-    merged_counts.plot(kind='bar', stacked=True, ax=ax)
-    ax.set_title('Number of Customers and Sellers by State')
-    ax.set_xlabel('State')
-    ax.set_ylabel('Count')
-    st.pyplot(fig)
+    selected_plot2 = st.selectbox('Select Plot', ['Percentage', 'Bar Chart', 'Difference'])
+    if selected_plot2 == 'Bar Chart':
+        fig, ax = plt.subplots(figsize=(10, 6))
+        merged_counts.plot(kind='bar', stacked=True, ax=ax)
+        ax.set_title('Number of Customers and Sellers by State')
+        ax.set_xlabel('State')
+        ax.set_ylabel('Count')
+        st.pyplot(fig)
+    
+    elif selected_plot2 == 'Difference':
+        fig, ax = plt.subplots(figsize=(10, 6))
+        merged_counts['Difference'] = merged_counts['Customers'] - merged_counts['Sellers']
+        st.bar_chart(merged_counts['Difference'])
+        plt.title('Difference of Customers and Sellers by State')
+        plt.xlabel('State')
+        plt.ylabel('Difference')
+
+    elif selected_plot2 == 'Percentage':
+        total_customers = merged_counts['Customers'].sum()
+        total_sellers = merged_counts['Sellers'].sum()
+        total_counts = pd.Series({'Customers': total_customers, 'Sellers': total_sellers})
+        fig, ax = plt.subplots(figsize=(8, 8))
+        total_counts.plot.pie(autopct='%1.2f%%', ax=ax)
+        ax.set_title('Portions of customers and sellers by percent')
+        st.pyplot(fig)
+
